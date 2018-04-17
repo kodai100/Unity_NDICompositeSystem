@@ -3,25 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using Klak.Ndi;
 using Klak.Spout;
+using PrefsGUI;
 
 public enum InputMode
 {
     NDI, Spout, Bypass
 }
 
-public class InputManager : MonoBehaviour {
+[System.Serializable]
+public class PrefsInputMode : PrefsParam<InputMode>
+{
+    public PrefsInputMode(string key, InputMode defaultValue = default(InputMode)) : base(key, defaultValue) { }
+}
+
+public class InputManager : MonoBehaviour, IDebuggable {
 
     [SerializeField] NdiReceiver _ndiReceiever;
     [SerializeField] SpoutReceiver _spoutReceiever;
 
-    [SerializeField] bool _enableDebugView = false;
-    [SerializeField] Rect _debugViewRext = new Rect(0, 0, Screen.width / 2, Screen.height / 2);
+    [SerializeField] PrefsBool _enableDebugView = new PrefsBool("Enable Debug View", false);
+    [SerializeField] PrefsRect _debugViewRect = new PrefsRect("Debug View Rect", new Rect(0, 0, Screen.width / 2, Screen.height / 2));
 
-    [SerializeField] Vector2Int _resolution = new Vector2Int(1920, 1080);
+    [SerializeField] PrefsVector2Int _resolution = new PrefsVector2Int("Resolution", new Vector2Int(1920, 1080));
 
-    [SerializeField] InputMode _inputMode = InputMode.NDI;
-    [SerializeField] string _nameFilter = "UnitySender";
-    [SerializeField] Rect _crop;
+    [SerializeField] PrefsInputMode _inputMode = new PrefsInputMode("Input Mode", InputMode.NDI);
+    [SerializeField] PrefsString _nameFilter = new PrefsString("Name Filter", "UnitySender");
+    [SerializeField] PrefsRect _crop = new PrefsRect("Crop Rect (UV)", new Rect(0, 0, 1, 1));
 
     RenderTexture _texture;
 
@@ -29,9 +36,19 @@ public class InputManager : MonoBehaviour {
     {
         return _texture;
     }
+
+    public void DebugMenu()
+    {
+        _enableDebugView.OnGUI();
+        _debugViewRect.OnGUI();
+        _resolution.OnGUI();
+        _inputMode.OnGUI();
+        _nameFilter.OnGUI();
+        _crop.OnGUI();
+    }
     
 	void Start () {
-        _texture = new RenderTexture(_resolution.x, _resolution.y, 24, RenderTextureFormat.ARGB32);
+        _texture = new RenderTexture(_resolution.Get().x, _resolution.Get().y, 24, RenderTextureFormat.ARGB32);
 
         _ndiReceiever.targetTexture = _texture;
         _spoutReceiever.targetTexture = _texture;
@@ -79,7 +96,7 @@ public class InputManager : MonoBehaviour {
     {
         if (_enableDebugView)
         {
-            GUI.DrawTexture(_debugViewRext, _texture, ScaleMode.StretchToFill, false);
+            GUI.DrawTexture(_debugViewRect, _texture, ScaleMode.StretchToFill, false);
         }
         
     }

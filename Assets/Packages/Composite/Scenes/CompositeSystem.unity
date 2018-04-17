@@ -158,7 +158,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &460456093
 MonoBehaviour:
@@ -188,22 +188,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ndiReceiever: {fileID: 460456091}
   _spoutReceiever: {fileID: 460456093}
-  _enableDebugView: 1
-  _debugViewRext:
-    serializedVersion: 2
-    x: 0
-    y: 540
-    width: 960
-    height: 540
-  _resolution: {x: 1920, y: 1080}
-  _inputMode: 0
-  _nameFilter: UnitySender
+  _enableDebugView:
+    key: Enable Debug View
+    defaultValue: 0
+  _debugViewRect:
+    key: Debug View Rect
+    defaultValue:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 960
+      height: 540
+  _resolution:
+    key: Resolution
+    defaultValue: {x: 1920, y: 1080}
+  _inputMode:
+    key: Input Mode
+    defaultValue: 0
+  _nameFilter:
+    key: Name Filter
+    defaultValue: UnitySender
   _crop:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
+    key: Crop Rect (UV)
+    defaultValue:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 1
+      height: 1
 --- !u!1 &486063782
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7abb10dd13839864baf966f44d548f39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _senderName: 
   _sourceTexture: {fileID: 0}
   _alphaSupport: 0
   _shader: {fileID: 4800000, guid: bed99414d2a0d46449ed7f070aaea7e3, type: 3}
@@ -248,7 +261,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &486063785
 MonoBehaviour:
@@ -261,7 +274,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45099d624c1e6c14e9514f4e5ea1ed9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _senderName: 
   _clearAlpha: 1
+  _sourceTexture: {fileID: 0}
 --- !u!20 &486063786
 Camera:
   m_ObjectHideFlags: 0
@@ -271,7 +286,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -309,6 +324,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e131e17c910134ab0cb055895bd3ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _senderName: UnityCompositeSender
+  _alphaSupport: 0
   _ndiSender: {fileID: 486063783}
   _spoutSender: {fileID: 486063785}
   _composite: {fileID: 503460714}
@@ -347,6 +364,7 @@ MonoBehaviour:
   - {fileID: 4800000, guid: 1e2b47e337e8e9547bc7380a664a0ea4, type: 3}
   - {fileID: 4800000, guid: 9a5bd9f572303d14eaa33ae34c9c4715, type: 3}
   - {fileID: 4800000, guid: 98d5b4b5a13b78445b89d9bfbccf0802, type: 3}
+  - {fileID: 4800000, guid: 80c89b101085a134ba209e1f28d57962, type: 3}
   _enableDebugView: 1
   _debugViewRect:
     serializedVersion: 2
@@ -368,7 +386,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &503460716
 Camera:
@@ -379,7 +397,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -406,6 +424,51 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &509588117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 509588119}
+  - component: {fileID: 509588118}
+  m_Layer: 0
+  m_Name: Debug
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &509588118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 509588117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c1dadc11b681844dbaf354cb86e7d91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _menuEnabled: 0
+  _inputManager1: {fileID: 1335188114}
+  _inputManager2: {fileID: 460456094}
+  _compositeManager: {fileID: 503460714}
+  _outputManager: {fileID: 486063787}
+--- !u!4 &509588119
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 509588117}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1335188110
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,7 +514,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1335188113
 MonoBehaviour:
@@ -481,19 +544,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ndiReceiever: {fileID: 1335188111}
   _spoutReceiever: {fileID: 1335188113}
-  _enableDebugView: 1
-  _debugViewRext:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 960
-    height: 540
-  _resolution: {x: 1920, y: 1080}
-  _inputMode: 1
-  _nameFilter: UnitySender
+  _enableDebugView:
+    key: Enable Debug View
+    defaultValue: 0
+  _debugViewRect:
+    key: Debug View Rect
+    defaultValue:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 960
+      height: 540
+  _resolution:
+    key: Resolution
+    defaultValue: {x: 1920, y: 1080}
+  _inputMode:
+    key: Input Mode
+    defaultValue: 0
+  _nameFilter:
+    key: Name Filter
+    defaultValue: UnitySender
   _crop:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 0
-    height: 0
+    key: Crop Rect (UV)
+    defaultValue:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 1
+      height: 1

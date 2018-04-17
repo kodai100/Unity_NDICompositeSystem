@@ -45,7 +45,7 @@ namespace Klak.Ndi
         [SerializeField, HideInInspector] Shader _shader;
         Material _material;
         RenderTexture _converted;
-
+         
         #endregion
 
         #region Frame readback queue

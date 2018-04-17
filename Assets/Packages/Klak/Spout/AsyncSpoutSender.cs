@@ -7,7 +7,7 @@ namespace Klak.Spout
     /// Spout sender class
     [AddComponentMenu("Klak/Spout/Spout Sender")]
     [ExecuteInEditMode]
-    public class SpoutSender : MonoBehaviour
+    public class AsyncSpoutSender : MonoBehaviour
     {
         #region Editable properties
 

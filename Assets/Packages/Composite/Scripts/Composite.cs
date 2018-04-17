@@ -1,24 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PrefsGUI;
 
 public enum CompositeMode
 {
     Additive, Screen, Luminance, Alpha, Bypass
 }
 
-public class Composite : MonoBehaviour {
+[System.Serializable]
+public class PrefsCompositeMode : PrefsParam<CompositeMode>
+{
+    public PrefsCompositeMode(string key, CompositeMode defaultValue = default(CompositeMode)) : base(key, defaultValue) { }
+}
+
+public class Composite : MonoBehaviour, IDebuggable {
 
     RenderTexture _inputTexture1;
     RenderTexture _inputTexture2;
 
-    [SerializeField] CompositeMode _compositeMode = CompositeMode.Additive;
+    [SerializeField] PrefsCompositeMode _compositeMode = new PrefsCompositeMode("Composite Mode", CompositeMode.Additive);
     CompositeMode _prevMode;
 
     [SerializeField] List<Shader> _compositeShaders = new List<Shader>(4);
 
-    [SerializeField] bool _enableDebugView = false;
-    [SerializeField] Rect _debugViewRect = new Rect(0, 0, Screen.width / 2, Screen.height / 2);
+    [SerializeField] PrefsBool _enableDebugView = new PrefsBool("Enable Debug View", false);
+    [SerializeField] PrefsRect _debugViewRect = new PrefsRect("Debug View Rect", new Rect(0, 0, Screen.width / 2, Screen.height / 2));
 
     [SerializeField] InputManager _input1;
     [SerializeField] InputManager _input2;
@@ -37,6 +44,13 @@ public class Composite : MonoBehaviour {
         _inputTexture2 = tex2;
     }
     
+    public void DebugMenu()
+    {
+        _compositeMode.OnGUI();
+        _enableDebugView.OnGUI();
+        _debugViewRect.OnGUI();
+
+    }
 
 	void Start () {
 
@@ -48,23 +62,6 @@ public class Composite : MonoBehaviour {
         RecreateMaterial(_compositeMode);
     }
 
-    private void OnRenderImage(RenderTexture source, RenderTexture destination)
-    {
-        if (_compositeMaterial == null) return;
-
-        if(_compositeMode == CompositeMode.Bypass)
-        {
-            _texture = _inputTexture2;
-            return;
-        }
-        
-        _compositeMaterial.SetTexture("_Layer1Tex", _inputTexture1);
-        _compositeMaterial.SetTexture("_Layer2Tex", _inputTexture2);
-        
-
-        Graphics.Blit(source, _texture, _compositeMaterial);
-    }
-
     // Update is called once per frame
     void Update () {
 		
@@ -73,7 +70,20 @@ public class Composite : MonoBehaviour {
             RecreateMaterial(_compositeMode);
         }
 
-	}
+
+        
+    }
+    
+    void OnRenderImage(RenderTexture src, RenderTexture dst)
+    {
+        if (_compositeMaterial == null) return;
+
+        _compositeMaterial.SetTexture("_Layer1Tex", _inputTexture1);
+        _compositeMaterial.SetTexture("_Layer2Tex", _inputTexture2);
+
+        Graphics.Blit(src, _texture, _compositeMaterial);
+    }
+    
 
     void RecreateMaterial(CompositeMode mode)
     {
@@ -92,6 +102,9 @@ public class Composite : MonoBehaviour {
                 break;
             case CompositeMode.Alpha:
                 _compositeMaterial = new Material(_compositeShaders[3]);
+                break;
+            case CompositeMode.Bypass:
+                _compositeMaterial = new Material(_compositeShaders[4]);
                 break;
             default:
                 break;
