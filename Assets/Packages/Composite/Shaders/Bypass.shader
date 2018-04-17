@@ -1,4 +1,4 @@
-﻿Shader "Custom/AdditiveComposite"
+﻿Shader "Custom/Bypass"
 {
 	Properties
 	{
@@ -15,7 +15,7 @@
 			#pragma fragment frag
 
 			#include "UnityCG.cginc"
-			#include "PhotoshopMath.cginc"
+			#include "Blending.cginc"
 
 			sampler2D _MainTex;
 			sampler2D _Layer1Tex;
@@ -34,12 +34,7 @@
 			}
 
 			fixed4 frag(v2f i) : SV_Target {
-				fixed4 texture1 = tex2D(_Layer1Tex, i.uv);
-				fixed4 texture2 = tex2D(_Layer2Tex, i.uv);
-
-				fixed4 col = float4(BlendAddf(texture1.rgb, texture2.rgb), 1);	// Composition
-
-				return col;
+				return tex2D(_Layer2Tex, i.uv);
 			}
 
 			ENDCG
